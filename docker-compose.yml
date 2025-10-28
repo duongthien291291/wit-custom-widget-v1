@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Development service with hot reload
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: wit-custom-widget-v1:latest
+    container_name: wit-widget-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount source code for hot reload
+      - ./src:/app/src
+      - ./index.html:/app/index.html
+      - ./vite.config.ts:/app/vite.config.ts
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./tsconfig.node.json:/app/tsconfig.node.json
+      # Exclude node_modules from host to use container's version
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    networks:
+      - wit-widget-network
+
+  # Production service
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: wit-custom-widget-v1:latest
+    container_name: wit-widget-prod
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - wit-widget-network
+
+networks:
+  wit-widget-network:
+    driver: bridge
+

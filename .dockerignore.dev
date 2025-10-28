@@ -1,0 +1,35 @@
+# Development dockerignore (keep minimal to enable hot reload)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output
+dist
+build
+*.log
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Test results
+test-results
+playwright-report
+.playwright
+
+# Documentation
+README.md
+DEPLOYMENT.md
+*.md
+

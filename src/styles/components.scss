@@ -1,0 +1,482 @@
+// Button component
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+  user-select: none;
+  
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+  
+  // Button variants
+  &-primary {
+    color: var(--white);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    
+    &:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+  }
+  
+  &-secondary {
+    color: var(--white);
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    
+    &:hover:not(:disabled) {
+      background-color: #5a6268;
+      border-color: #545b62;
+    }
+  }
+  
+  &-outline-primary {
+    color: var(--primary-color);
+    background-color: transparent;
+    border-color: var(--primary-color);
+    
+    &:hover:not(:disabled) {
+      color: var(--white);
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+  }
+  
+  // Button sizes
+  &-sm {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+    border-radius: var(--border-radius-sm);
+  }
+  
+  &-lg {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1.125rem;
+    border-radius: var(--border-radius-lg);
+  }
+}
+
+// Card component
+.card {
+  background-color: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  
+  &:hover {
+    box-shadow: var(--shadow-md);
+  }
+  
+  &-header {
+    padding: var(--spacing-md);
+    background-color: var(--gray-100);
+    border-bottom: 1px solid var(--gray-200);
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+  }
+  
+  &-body {
+    padding: var(--spacing-md);
+  }
+  
+  &-footer {
+    padding: var(--spacing-md);
+    background-color: var(--gray-100);
+    border-top: 1px solid var(--gray-200);
+    border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+  }
+}
+
+// Widget item component
+.widget-item {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  background-color: var(--white);
+  border: 1px dashed var(--gray-300);
+  border-radius: var(--border-radius-md);
+  cursor: grab;
+  user-select: none;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+  
+  &:hover {
+    border-color: var(--primary-color);
+    background-color: var(--gray-100);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  &:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+  }
+  
+  // Make draggable - disable transitions during drag for better performance
+  &.ui-draggable {
+    cursor: grab;
+    
+    &.ui-draggable-dragging {
+      cursor: grabbing;
+      transform: rotate(2deg);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      transition: none; // Disable transitions during drag
+    }
+  }
+  
+  // GridStack item styling for drag-and-drop
+  &.grid-stack-item {
+    // Ensure the item can be dragged into the grid
+    &.ui-draggable {
+      cursor: grab;
+      
+      &.ui-draggable-dragging {
+        cursor: grabbing;
+        transform: rotate(2deg);
+        box-shadow: var(--shadow-lg);
+        z-index: 1000;
+        transition: none; // Disable transitions during drag
+      }
+    }
+  }
+  
+  // Drag over states
+  &.ui-draggable-over {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    opacity: 0.1;
+  }
+  
+  &-icon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  &-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    text-align: center;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  &-description {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    text-align: center;
+    line-height: 1.4;
+  }
+}
+
+// Layout components
+.app-layout {
+  display: flex;
+  height: 100vh;
+  background-color: var(--gray-100);
+  
+  &-sidebar {
+    width: 300px;
+    background-color: var(--white);
+    border-right: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+    overflow-y: auto;
+    z-index: var(--z-fixed);
+  }
+  
+  &-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  &-header {
+    background-color: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    padding: var(--spacing-md) var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    z-index: var(--z-sticky);
+  }
+  
+  &-content {
+    flex: 1;
+    padding: var(--spacing-lg);
+    overflow: auto;
+  }
+}
+
+// Dashboard component
+.dashboard {
+  height: 100%;
+  width: 100%;
+}
+
+// Grid container
+.grid-container {
+  min-height: 100%;
+  background-color: var(--gray-100);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  
+  // Drop zone styling
+  &.drag-over {
+    background-color: var(--primary-color);
+    opacity: 0.1;
+    border: 1px dashed var(--primary-color);
+  }
+}
+
+// GridStack specific styling
+.grid-stack {
+  min-height: 500px;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+// Header component styles
+.header {
+  &-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  &-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin: 0;
+  }
+  
+  &-subtitle {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin: 0;
+  }
+  
+  &-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+  }
+  
+  &-unsaved-indicator {
+    font-size: 0.75rem;
+    color: var(--warning-color);
+    font-weight: 500;
+  }
+  
+  &-save-button {
+    font-size: 0.875rem;
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+    
+    &:not(:disabled) {
+      opacity: 1;
+    }
+    
+    &.disabled {
+      opacity: 0.7;
+    }
+  }
+  
+  &-clear-button {
+    font-size: 0.875rem;
+  }
+}
+
+// Widget palette styles
+.widget-palette {
+  &-header {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  
+  &-description {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+  }
+  
+  &-body {
+    padding: var(--spacing-md);
+  }
+  
+  &-category {
+    margin-bottom: var(--spacing-lg);
+    
+    &-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin: 0 0 var(--spacing-sm) 0;
+      padding-bottom: var(--spacing-xs);
+      border-bottom: 1px solid var(--gray-200);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    &-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: var(--spacing-sm);
+    }
+  }
+}
+
+// Widget component styles
+.widget {
+  &-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  
+  &-content {
+    padding: var(--spacing-md);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &-title {
+    margin: 0 0 16px 0;
+    color: var(--gray-700);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  &-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// Chart widget specific styles
+.chart-container {
+  width: 100%;
+  height: 200px;
+}
+
+.chart-bars {
+  display: flex;
+  align-items: end;
+  height: 100%;
+  gap: 4px;
+}
+
+.chart-bar {
+  flex: 1;
+  background: linear-gradient(to top, var(--primary-color), var(--primary-hover));
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  
+  // Override with custom properties when available
+  &:not([style*="--bar-height"]) {
+    background: linear-gradient(to top, var(--primary-color), var(--primary-hover));
+  }
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.chart-line-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+// Text widget specific styles
+.text-widget {
+  background-color: #f8f9fa;
+}
+
+.text-widget-content {
+  text-align: center;
+  width: 100%;
+}
+
+// Image widget specific styles
+.image-widget {
+  overflow: hidden;
+}
+
+.image-widget-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 8px;
+}
+
+.image-widget-img {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--border-radius-sm);
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+    
+    &-sidebar {
+      width: 100%;
+      height: auto;
+      max-height: 200px;
+    }
+  }
+  
+  .widget-item {
+    padding: var(--spacing-sm);
+    
+    &-icon {
+      font-size: 1.5rem;
+    }
+    
+    &-title {
+      font-size: 0.75rem;
+    }
+    
+    &-description {
+      font-size: 0.625rem;
+    }
+  }
+}
