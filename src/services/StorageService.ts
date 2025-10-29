@@ -7,7 +7,7 @@ import { StorageService } from '../types';
 export class LocalStorageService implements StorageService {
   private readonly prefix = 'wit-widget-';
 
-  save(key: string, data: any): void {
+  save(key: string, data: unknown): void {
     try {
       const serializedData = JSON.stringify(data);
       localStorage.setItem(this.prefix + key, serializedData);

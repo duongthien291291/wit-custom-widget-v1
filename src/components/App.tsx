@@ -9,7 +9,7 @@ import { Dashboard } from './Dashboard';
  * Follows Dependency Inversion Principle
  * Optimized with custom hooks for better performance
  */
-export function App() {
+export const App = () => {
   const { widgetManager, addWidgetFromClick } = useWidgetManager();
 
   return (
@@ -29,4 +29,4 @@ export function App() {
       </main>
     </div>
   );
-}
+};

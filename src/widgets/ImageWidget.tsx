@@ -1,5 +1,6 @@
 import { WidgetConfig } from '../types';
 import { BaseWidget } from './BaseWidget';
+import { JSX } from 'preact/jsx-runtime';
 
 /**
  * Image Widget implementation
@@ -10,11 +11,11 @@ export class ImageWidget extends BaseWidget {
     super(config);
   }
 
-  protected render(): any {
+  protected render(): JSX.Element {
     const data = this.getData();
-    const imageUrl = data.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image';
-    const altText = data.altText || 'Widget Image';
-    const fitMode = data.fitMode || 'cover';
+    const imageUrl = (data.imageUrl as string) || 'https://via.placeholder.com/300x200?text=No+Image';
+    const altText = (data.altText as string) || 'Widget Image';
+    const fitMode = (data.fitMode as string) || 'cover';
 
     return (
       <div className="widget-container image-widget">
@@ -26,7 +27,7 @@ export class ImageWidget extends BaseWidget {
             style={{
               '--image-fit-mode': fitMode,
               objectFit: 'var(--image-fit-mode)'
-            } as any}
+            } as Record<string, string>}
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = 'https://via.placeholder.com/300x200?text=Image+Not+Found';

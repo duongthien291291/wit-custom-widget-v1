@@ -9,7 +9,7 @@ import { ImageWidget } from '../widgets/ImageWidget';
  * Easy to extend with new widget types without modifying existing code
  */
 export class ConcreteWidgetFactory implements WidgetFactory {
-  private widgetRegistry = new Map<string, typeof BaseWidget>();
+  private widgetRegistry = new Map<string, new (config: WidgetConfig) => BaseWidget>();
   private widgetMetadata = new Map<string, WidgetMetadata>();
 
   constructor() {
@@ -70,7 +70,7 @@ export class ConcreteWidgetFactory implements WidgetFactory {
     };
 
     const finalConfig = { ...defaultConfig, ...config };
-    const widget = new (WidgetClass as any)(finalConfig);
+    const widget = new WidgetClass(finalConfig);
     
     return widget.createInstance();
   }
@@ -86,7 +86,7 @@ export class ConcreteWidgetFactory implements WidgetFactory {
   // Extension point - new widgets can be registered dynamically
   registerWidget(
     type: string, 
-    widgetClass: typeof BaseWidget, 
+    widgetClass: new (config: WidgetConfig) => BaseWidget, 
     metadata: WidgetMetadata
   ): void {
     this.widgetRegistry.set(type, widgetClass);

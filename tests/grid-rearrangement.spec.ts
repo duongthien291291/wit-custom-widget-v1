@@ -91,7 +91,7 @@ test.describe('Grid Rearrangement Detection', () => {
     
     // Record positions before third widget
     const allWidgetsBeforeThird = await page.locator('.grid-stack-item').all();
-    const positionsBeforeThird = [];
+    const positionsBeforeThird: { x: number | undefined; y: number | undefined; }[] = [];
     for (let i = 0; i < allWidgetsBeforeThird.length; i++) {
       const box = await allWidgetsBeforeThird[i].boundingBox();
       positionsBeforeThird.push({ x: box?.x, y: box?.y });
@@ -103,7 +103,7 @@ test.describe('Grid Rearrangement Detection', () => {
     
     // Record positions after third widget
     const allWidgetsAfterThird = await page.locator('.grid-stack-item').all();
-    const positionsAfterThird = [];
+    const positionsAfterThird: { x: number | undefined; y: number | undefined; }[] = [];
     for (let i = 0; i < allWidgetsAfterThird.length; i++) {
       const box = await allWidgetsAfterThird[i].boundingBox();
       positionsAfterThird.push({ x: box?.x, y: box?.y });
@@ -196,7 +196,6 @@ test.describe('Grid Rearrangement Detection', () => {
     console.log('🎯 Testing rapid widget additions');
     
     const widgetTypes = ['Text Widget', 'Chart Widget', 'Image Widget'];
-    const positions = [];
     
     for (let i = 0; i < widgetTypes.length; i++) {
       const widgetType = widgetTypes[i];
@@ -207,7 +206,7 @@ test.describe('Grid Rearrangement Detection', () => {
       
       // Record positions before adding
       const currentWidgets = await page.locator('.grid-stack-item').all();
-      const currentPositions = [];
+      const currentPositions: { x: number | undefined; y: number | undefined; }[] = [];
       for (let j = 0; j < currentWidgets.length; j++) {
         const box = await currentWidgets[j].boundingBox();
         currentPositions.push({ x: box?.x, y: box?.y });
@@ -220,7 +219,7 @@ test.describe('Grid Rearrangement Detection', () => {
       
       // Record positions after adding
       const newWidgets = await page.locator('.grid-stack-item').all();
-      const newPositions = [];
+      const newPositions: { x: number | undefined; y: number | undefined; }[] = [];
       for (let j = 0; j < newWidgets.length; j++) {
         const box = await newWidgets[j].boundingBox();
         newPositions.push({ x: box?.x, y: box?.y });

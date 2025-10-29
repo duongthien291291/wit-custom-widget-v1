@@ -9,7 +9,7 @@ import { LocalStorageService } from '../services/StorageService';
  * Provides memoized instance and optimized callbacks
  * Follows performance best practices with useMemo and useCallback
  */
-export function useWidgetManager() {
+export const useWidgetManager = () => {
   // Memoize service instances to prevent recreation on every render
   const services = useMemo(() => {
     const storageService = new LocalStorageService();
@@ -30,7 +30,7 @@ export function useWidgetManager() {
     services.widgetManager.removeWidget(id);
   }, [services.widgetManager]);
 
-  const handleWidgetUpdate = useCallback((id: string, updates: any) => {
+  const handleWidgetUpdate = useCallback((id: string, updates: Record<string, unknown>) => {
     services.widgetManager.updateWidget(id, updates);
   }, [services.widgetManager]);
 
@@ -44,4 +44,4 @@ export function useWidgetManager() {
     removeWidget: handleWidgetRemove,
     updateWidget: handleWidgetUpdate
   };
-}
+};

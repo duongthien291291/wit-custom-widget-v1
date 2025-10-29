@@ -9,7 +9,7 @@ interface HeaderProps {
  * Application header with controls
  * Follows Single Responsibility Principle
  */
-export function Header({ widgetManager }: HeaderProps) {
+export const Header = ({ widgetManager }: HeaderProps) => {
   const handleClearAll = () => {
     if (confirm('Are you sure you want to clear all widgets? This action cannot be undone.')) {
       widgetManager.clearAllWidgets();
@@ -70,4 +70,4 @@ export function Header({ widgetManager }: HeaderProps) {
       </div>
     </header>
   );
-}
+};

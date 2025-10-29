@@ -1,3 +1,5 @@
+import { JSX } from 'preact/jsx-runtime';
+
 // Core types and interfaces following Interface Segregation Principle
 
 export interface WidgetConfig {
@@ -8,7 +10,7 @@ export interface WidgetConfig {
   y: number;
   w: number;
   h: number;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 export interface WidgetMetadata {
@@ -24,11 +26,11 @@ export interface WidgetInstance {
   id: string;
   type: string;
   config: WidgetConfig;
-  component: () => any;
+  component: () => JSX.Element;
 }
 
 export interface StorageService {
-  save(key: string, data: any): void;
+  save(key: string, data: unknown): void;
   load<T>(key: string): T | null;
   remove(key: string): void;
 }
@@ -50,7 +52,7 @@ export interface DragDropService {
 }
 
 export interface WidgetRenderer {
-  render(widget: WidgetInstance): any;
+  render(widget: WidgetInstance): JSX.Element;
 }
 
 export type WidgetChangeCallback = (widgets: WidgetConfig[]) => void;

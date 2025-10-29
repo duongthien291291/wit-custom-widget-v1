@@ -1,4 +1,5 @@
 import { WidgetConfig, WidgetInstance } from '../types';
+import { JSX } from 'preact/jsx-runtime';
 
 /**
  * Abstract Base Widget following Template Method Pattern
@@ -22,14 +23,14 @@ export abstract class BaseWidget {
   }
 
   // Abstract method - must be implemented by concrete widgets
-  protected abstract render(): any;
+  protected abstract render(): JSX.Element;
 
   // Hook methods - can be overridden by subclasses
   protected getTitle(): string {
     return this.config.title;
   }
 
-  protected getData(): Record<string, any> {
+  protected getData(): Record<string, unknown> {
     return this.config.data || {};
   }
 

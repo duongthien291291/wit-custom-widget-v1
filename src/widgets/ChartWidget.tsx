@@ -1,5 +1,6 @@
 import { WidgetConfig } from '../types';
 import { BaseWidget } from './BaseWidget';
+import { JSX } from 'preact/jsx-runtime';
 
 /**
  * Chart Widget implementation
@@ -10,11 +11,10 @@ export class ChartWidget extends BaseWidget {
     super(config);
   }
 
-  protected render(): any {
+  protected render(): JSX.Element {
     const data = this.getData();
-    const chartType = data.chartType || 'bar';
-    const values = data.values || [10, 20, 30, 40, 50];
-    const labels = data.labels || ['A', 'B', 'C', 'D', 'E'];
+    const chartType = (data.chartType as string) || 'bar';
+    const values = (data.values as number[]) || [10, 20, 30, 40, 50];
 
     return (
       <div className="widget-container">
@@ -24,7 +24,7 @@ export class ChartWidget extends BaseWidget {
           </h4>
           <div className="widget-body">
             <div className="chart-container">
-              {this.renderChart(chartType, values, labels)}
+              {this.renderChart(chartType, values)}
             </div>
           </div>
         </div>
@@ -32,7 +32,7 @@ export class ChartWidget extends BaseWidget {
     );
   }
 
-  private renderChart(type: string, values: number[], _labels: string[]): any {
+  private renderChart = (type: string, values: number[]): JSX.Element => {
     const maxValue = Math.max(...values);
     
     if (type === 'bar') {
@@ -47,7 +47,7 @@ export class ChartWidget extends BaseWidget {
                 '--bar-color': `hsl(${index * 60}, 70%, 50%)`,
                 height: 'var(--bar-height)',
                 backgroundColor: 'var(--bar-color)'
-              } as any}
+              } as Record<string, string>}
             >
               {value}
             </div>

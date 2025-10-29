@@ -1,5 +1,6 @@
 import { WidgetConfig } from '../types';
 import { BaseWidget } from './BaseWidget';
+import { JSX } from 'preact/jsx-runtime';
 
 /**
  * Text Widget implementation
@@ -10,11 +11,11 @@ export class TextWidget extends BaseWidget {
     super(config);
   }
 
-  protected render(): any {
+  protected render(): JSX.Element {
     const data = this.getData();
-    const content = data.content || 'Enter your text here...';
-    const fontSize = data.fontSize || '16px';
-    const color = data.color || '#333';
+    const content = (data.content as string) || 'Enter your text here...';
+    const fontSize = (data.fontSize as string) || '16px';
+    const color = (data.color as string) || '#333';
 
     return (
       <div 
@@ -26,7 +27,7 @@ export class TextWidget extends BaseWidget {
           fontSize: 'var(--text-font-size)',
           color: 'var(--text-color)',
           backgroundColor: 'var(--text-bg-color)'
-        } as any}
+        } as Record<string, string>}
       >
         <div className="widget-content">
           <div className="text-widget-content">

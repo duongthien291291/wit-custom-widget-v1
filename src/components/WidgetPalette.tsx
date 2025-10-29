@@ -12,7 +12,7 @@ interface WidgetPaletteProps {
  * Follows Single Responsibility Principle
  * Optimized with useMemo and useCallback for performance
  */
-export function WidgetPalette({ availableWidgets, onWidgetSelect }: WidgetPaletteProps) {
+export const WidgetPalette = ({ availableWidgets, onWidgetSelect }: WidgetPaletteProps) => {
   // Memoize grouped widgets for performance
   const groupedWidgets = useMemo(() => {
     const groups = availableWidgets.reduce((acc, widget) => {

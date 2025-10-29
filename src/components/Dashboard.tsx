@@ -10,7 +10,7 @@ interface DashboardProps {
  * Main container for the widget grid
  * Follows Single Responsibility Principle
  */
-export function Dashboard({ widgetManager }: DashboardProps) {
+export const Dashboard = ({ widgetManager }: DashboardProps) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,4 +31,4 @@ export function Dashboard({ widgetManager }: DashboardProps) {
       </div>
     </div>
   );
-}
+};

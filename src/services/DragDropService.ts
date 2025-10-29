@@ -1,4 +1,4 @@
-import { GridStack, GridStackOptions, GridStackWidget } from 'gridstack';
+import { GridStack, GridStackOptions, GridStackWidget, GridStackNode } from 'gridstack';
 import { WidgetConfig, DragDropService, WidgetInstance } from '../types';
 
 /**
@@ -107,7 +107,7 @@ export class GridStackDragDropService implements DragDropService {
     x?: number;
     y?: number;
     title?: string;
-    data?: any;
+    data?: Record<string, unknown>;
   }): void {
     if (!this.grid) return;
 
@@ -149,7 +149,7 @@ export class GridStackDragDropService implements DragDropService {
         h: options?.h,
         x: options?.x,
         y: options?.y
-      }).filter(([_, value]) => value !== undefined)
+      }).filter(([, value]) => value !== undefined)
     );
     
     this.grid.addWidget(element, Object.keys(widgetOptions).length > 0 ? widgetOptions : undefined);
@@ -201,7 +201,7 @@ export class GridStackDragDropService implements DragDropService {
   /**
    * Maps GridStack items to WidgetConfig objects
    */
-  private mapItemsToWidgets(items: any[]): WidgetConfig[] {
+  private mapItemsToWidgets(items: GridStackNode[]): WidgetConfig[] {
     return items.map(item => {
       const dataAttr = item.el?.getAttribute('data-widget-data');
       let data = {};
