@@ -1,3 +1,4 @@
+import { useState } from 'preact/hooks';
 import { WidgetManager } from '../services/WidgetManager';
 
 interface HeaderProps {
@@ -8,29 +9,39 @@ interface HeaderProps {
  * Header Component
  * Application header with controls
  * Follows Single Responsibility Principle
+ * Optimized with React state instead of DOM manipulation
  */
 export const Header = ({ widgetManager }: HeaderProps) => {
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+
   const handleClearAll = () => {
     if (confirm('Are you sure you want to clear all widgets? This action cannot be undone.')) {
       widgetManager.clearAllWidgets();
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    setSaveStatus('saving');
     widgetManager.save();
     
-    // Show visual feedback
-    const saveButton = document.getElementById('save-button');
-    if (saveButton) {
-      const originalText = saveButton.textContent;
-      saveButton.textContent = 'Saved!';
-      saveButton.style.backgroundColor = 'var(--success-color)';
-      
-      setTimeout(() => {
-        saveButton.textContent = originalText;
-        saveButton.style.backgroundColor = '';
-      }, 2000);
+    // Show visual feedback using React state
+    setSaveStatus('saved');
+    setTimeout(() => setSaveStatus('idle'), 2000);
+  };
+
+  const getSaveButtonText = () => {
+    switch (saveStatus) {
+      case 'saving': return 'Saving...';
+      case 'saved': return 'Saved!';
+      default: return '💾 Save Dashboard';
     }
+  };
+
+  const getSaveButtonClass = () => {
+    const baseClass = 'btn btn-primary header-save-button';
+    const disabledClass = widgetManager.hasUnsavedChanges.value ? '' : 'disabled';
+    const statusClass = saveStatus === 'saved' ? 'btn-success' : '';
+    return `${baseClass} ${disabledClass} ${statusClass}`.trim();
   };
 
   return (
@@ -52,12 +63,11 @@ export const Header = ({ widgetManager }: HeaderProps) => {
             </span>
           )}
           <button
-            id="save-button"
-            class={`btn btn-primary header-save-button ${widgetManager.hasUnsavedChanges.value ? '' : 'disabled'}`}
+            class={getSaveButtonClass()}
             onClick={handleSave}
-            disabled={!widgetManager.hasUnsavedChanges.value}
+            disabled={!widgetManager.hasUnsavedChanges.value || saveStatus === 'saving'}
           >
-            💾 Save Dashboard
+            {getSaveButtonText()}
           </button>
           
           <button

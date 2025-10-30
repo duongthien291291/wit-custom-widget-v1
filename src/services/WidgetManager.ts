@@ -134,26 +134,33 @@ export class WidgetManager {
   }
 
   private handleWidgetChange(widgetConfigs: WidgetConfig[]): void {
-    // Start with existing widgets and update their positions/sizes
-    const existingWidgets = new Map(
-      this.widgets.value.map(w => [w.id, w])
-    );
+    // Only update if there are actual changes to avoid unnecessary re-renders
+    const currentConfigs = this.widgets.value.map(w => w.config);
+    const hasChanges = this.hasConfigChanges(currentConfigs, widgetConfigs);
     
-    // Process all widgets from the grid
-    const updatedWidgets = widgetConfigs.map(config => {
-      const existingWidget = existingWidgets.get(config.id);
-      
-      if (existingWidget) {
-        // Update existing widget
-        return this.factory.createWidget(config.type, config);
-      } else {
-        // Add new widget (added via drag-drop)
-        return this.factory.createWidget(config.type, config);
-      }
-    });
+    if (!hasChanges) return;
+    
+    // Batch create widgets for better performance
+    const updatedWidgets = widgetConfigs.map(config => 
+      this.factory.createWidget(config.type, config)
+    );
 
     this.widgets.value = updatedWidgets;
     this.hasUnsavedChanges.value = true;
+  }
+
+  private hasConfigChanges(current: WidgetConfig[], updated: WidgetConfig[]): boolean {
+    if (current.length !== updated.length) return true;
+    
+    const currentMap = new Map(current.map(c => [c.id, c]));
+    return updated.some(config => {
+      const existing = currentMap.get(config.id);
+      return !existing || 
+        existing.x !== config.x || 
+        existing.y !== config.y || 
+        existing.w !== config.w || 
+        existing.h !== config.h;
+    });
   }
 
   private async loadWidgets(): Promise<void> {
@@ -179,17 +186,19 @@ export class WidgetManager {
   private saveWidgets(): void {
     try {
       // Get all widgets from the grid to ensure we capture everything
-      // This includes widgets added via drag-drop that might not be in state yet
       const gridWidgets = this.dragDropService.getAllWidgets();
       
       // Save what's actually in the grid
       this.storageService.save('widgets', gridWidgets);
       
-      // Update our state to match what's in the grid
-      const widgetInstances = gridWidgets.map(config => 
-        this.factory.createWidget(config.type, config)
-      );
-      this.widgets.value = widgetInstances;
+      // Only update state if it's different to avoid unnecessary re-renders
+      const currentConfigs = this.widgets.value.map(w => w.config);
+      if (this.hasConfigChanges(currentConfigs, gridWidgets)) {
+        const widgetInstances = gridWidgets.map(config => 
+          this.factory.createWidget(config.type, config)
+        );
+        this.widgets.value = widgetInstances;
+      }
     } catch (error) {
       console.error('Failed to save widgets:', error);
     }

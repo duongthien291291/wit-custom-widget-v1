@@ -34,27 +34,6 @@ export const WidgetPalette = ({ availableWidgets, onWidgetSelect }: WidgetPalett
     onWidgetSelect(type, title, icon, description);
   }, [onWidgetSelect]);
 
-  // Add visual drag feedback
-  const handleMouseDown = useCallback((e: MouseEvent) => {
-    const target = e.currentTarget as HTMLElement;
-    target.style.transform = 'scale(0.95)';
-    target.style.opacity = '0.8';
-  }, []);
-
-  const handleMouseUp = useCallback((e: MouseEvent) => {
-    const target = e.currentTarget as HTMLElement;
-    target.style.transform = '';
-    target.style.opacity = '';
-  }, []);
-
-  const handleMouseLeave = useCallback((e: MouseEvent) => {
-    const target = e.currentTarget as HTMLElement;
-    target.style.transform = '';
-    target.style.opacity = '';
-  }, []);
-
-  // GridStack handles drag events automatically - no custom handlers needed
-
   return (
     <div className="widget-palette">
       <div className="card">
@@ -84,9 +63,6 @@ export const WidgetPalette = ({ availableWidgets, onWidgetSelect }: WidgetPalett
                     gs-h="2"
                     draggable={true}
                     onClick={() => handleWidgetClick(widget.type, widget.name, widget.icon, widget.description)}
-                    onMouseDown={handleMouseDown}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseLeave}
                   >
                     <div className="grid-stack-item-content">
                       <div className="widget-item-icon">{widget.icon}</div>

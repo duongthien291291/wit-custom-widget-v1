@@ -5,6 +5,13 @@ test.describe('Click-to-Add Widget Test', () => {
     await page.goto('/');
     // Wait for the application to load
     await page.waitForSelector('.app-layout', { timeout: 10000 });
+    
+    // Clear any existing widgets to ensure clean test state
+    const clearButton = page.locator('button').filter({ hasText: 'Clear All' });
+    if (await clearButton.isVisible()) {
+      await clearButton.click();
+      await page.waitForTimeout(500);
+    }
   });
 
   test('should add widget by clicking on palette item', async ({ page }) => {
@@ -65,6 +72,10 @@ test.describe('Click-to-Add Widget Test', () => {
     
     const widgetTypes = ['Text Widget', 'Chart Widget', 'Image Widget'];
     
+    // Get initial widget count
+    const initialCount = await page.locator('.grid-stack-item').count();
+    console.log(`📊 Initial widget count: ${initialCount}`);
+    
     for (let i = 0; i < widgetTypes.length; i++) {
       const widgetType = widgetTypes[i];
       console.log(`📝 Adding widget ${i + 1}: ${widgetType}`);
@@ -78,14 +89,14 @@ test.describe('Click-to-Add Widget Test', () => {
       
       // Check if widget was added
       const currentWidgets = await page.locator('.grid-stack-item').count();
-      expect(currentWidgets).toBe(i + 1);
+      expect(currentWidgets).toBe(initialCount + i + 1);
       
       console.log(`✅ ${widgetType} added successfully`);
     }
     
     // Final verification
     const finalCount = await page.locator('.grid-stack-item').count();
-    expect(finalCount).toBe(3);
+    expect(finalCount).toBe(initialCount + widgetTypes.length);
     console.log(`✅ All ${finalCount} widgets added successfully`);
     
     // Take final screenshot

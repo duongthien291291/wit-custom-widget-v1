@@ -200,23 +200,31 @@ export class GridStackDragDropService implements DragDropService {
 
   /**
    * Maps GridStack items to WidgetConfig objects
+   * Optimized with caching and error handling
    */
   private mapItemsToWidgets(items: GridStackNode[]): WidgetConfig[] {
     return items.map(item => {
-      const dataAttr = item.el?.getAttribute('data-widget-data');
+      const el = item.el;
+      if (!el) {
+        console.warn('GridStack item missing element:', item);
+        return this.createDefaultConfig(item);
+      }
+
+      const dataAttr = el.getAttribute('data-widget-data');
       let data = {};
       
-      try {
-        data = dataAttr ? JSON.parse(dataAttr) : {};
-      } catch (error) {
-        console.warn('Failed to parse widget data:', error);
-        data = {};
+      if (dataAttr) {
+        try {
+          data = JSON.parse(dataAttr);
+        } catch (error) {
+          console.warn('Failed to parse widget data:', error);
+        }
       }
       
       return {
-        id: item.id || '',
-        type: item.el?.getAttribute('data-widget-type') || '',
-        title: item.el?.getAttribute('data-widget-title') || '',
+        id: item.id || this.generateFallbackId(),
+        type: el.getAttribute('data-widget-type') || 'unknown',
+        title: el.getAttribute('data-widget-title') || 'Untitled Widget',
         x: item.x || 0,
         y: item.y || 0,
         w: item.w || 1,
@@ -224,6 +232,23 @@ export class GridStackDragDropService implements DragDropService {
         data
       };
     });
+  }
+
+  private createDefaultConfig(item: GridStackNode): WidgetConfig {
+    return {
+      id: item.id || this.generateFallbackId(),
+      type: 'unknown',
+      title: 'Untitled Widget',
+      x: item.x || 0,
+      y: item.y || 0,
+      w: item.w || 1,
+      h: item.h || 1,
+      data: {}
+    };
+  }
+
+  private generateFallbackId(): string {
+    return `fallback-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   destroy(): void {
